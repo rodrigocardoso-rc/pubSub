@@ -1,21 +1,29 @@
 var amqp = require('amqplib/callback_api');
 
-amqp.connect('amqp://localhost', function(error0, connection) {
-  if (error0) {
-    throw error0;
+amqp.connect('amqp://localhost', function(err, connection) {
+  if (err) {
+    throw err;
   }
-  connection.createChannel(function(error1, channel) {
-    if (error1) {
-      throw error1;
-    }
-    var exchange = 'Conversa 1';
-    var msg = process.argv.slice(2).join(' ') || 'Hello World!';
 
-/*     channel.assertExchange(exchange, 'fanout', {
-      durable: false
-    }); */
-    channel.publish(exchange, '', Buffer.from(msg));
-    console.log(" [x] Sent %s", msg);
+  connection.createChannel((err, channel) => {
+    if (err) {
+      throw err;
+    }
+
+    var exchange = 'conversa01';
+    var content = process.argv.slice(2).join(' ') || '';
+
+    const msgObj= {
+      idMensagem: '1',
+      idConversa: exchange,
+      idUsuario: '1',
+      nomeUsuario: 'Rogério',
+      conteudo: content,
+      dataHora: new Date()
+    }
+
+    channel.publish(exchange, '', Buffer.from(JSON.stringify(msgObj)));
+    console.log(" [x] Sent %s", msgObj);
   });
 
   setTimeout(function() {

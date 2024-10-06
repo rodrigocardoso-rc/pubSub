@@ -32,7 +32,7 @@ async function connectUser(connection) {
     })
 }
 
-async function createExchange(exchange, channel) {
+async function createExtendIfNotExists(exchange, channel) {
     channel.assertExchange(exchange, 'fanout', { durable: true });
 }
 
@@ -53,12 +53,12 @@ async function connectOnExchange(userId, exchange, channel) {
             // Consumir mensagens dessa fila exclusiva
             channel.consume(q.queue, function (msg) {
                 if (msg.content) {
-                    console.log(` [Consumer ${userId}] Received: ${msg.content.toString()}`);
+                    const msgObj = JSON.parse(msg.content);
+
+                    console.log(`[Consumer ${userId}] [Exchange ${msgObj.idConversa}] => ${msgObj.conteudo}`);
                 }
             }, { noAck: true });
         });
 }
 
-
-
-module.exports = { createConnection, connectUser, connectOnExchange, createExchange }
+module.exports = { createConnection, connectUser, connectOnExchange, createExtendIfNotExists }
