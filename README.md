@@ -1,6 +1,6 @@
 **Trabalho Final - Engenharia de software**
 
-**Grupo:
+Grupo:
  - João Melo
  - Rodrigo Cardoso
- - Thiago Moraes**
+ - Thiago Moraes
